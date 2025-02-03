@@ -1,0 +1,3 @@
+*.json
+.lcpr_data/
+.vscode/
