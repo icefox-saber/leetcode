@@ -28,62 +28,48 @@ using namespace std;
 #include <vector>
 // @lcpr-template-end
 // @lc code=start
-class Solution
-{
+class Solution {
 public:
-    bool validPalindrome(string s)
-    {
-        int i = 0;
-        int j = s.size() - 1;
-        for (; i <= j; i++, j--)
-        {
-            if (s[i] == s[j])
-            {
-                continue;
+  bool validPalindrome(string s) {
+    int i = 0;
+    int j = s.size() - 1;
+    for (; i <= j; i++, j--) {
+      if (s[i] == s[j]) {
+        continue;
+      } else // 进去以后出不来
+      {
+
+        bool flag = true;
+        int tmpi = i + 1;
+        int tmpj = j;
+        for (; tmpi < tmpj; tmpi++, tmpj--) {
+          if (s[tmpi] == s[tmpj]) {
+            continue;
+          } else {
+            flag = false;
+            break;
+          }
+        }
+        if (flag == false) {
+          int tmpi = i;
+          int tmpj = j - 1;
+          for (; tmpi < tmpj; tmpi++, tmpj--) {
+            if (s[tmpi] == s[tmpj]) {
+              continue;
+            } else {
+              return false;
             }
-            else // 进去以后出不来
-            {
+          }
 
-                bool flag = true;
-                int tmpi = i + 1;
-                int tmpj = j;
-                for (; tmpi < tmpj; tmpi++, tmpj--)
-                {
-                    if (s[tmpi] == s[tmpj])
-                    {
-                        continue;
-                    }
-                    else
-                    {
-                        flag = false;
-                        break;
-                    }
-                }
-                if (flag == false)
-                {
-                    int tmpi = i;
-                    int tmpj = j - 1;
-                    for (; tmpi < tmpj; tmpi++, tmpj--)
-                    {
-                        if (s[tmpi] == s[tmpj])
-                        {
-                            continue;
-                        }
-                        else
-                        {
-                            return false;
-                        }
-                    }
-
-                    return true;
-                }
-
-                return true;
-            }
+          return true;
         }
 
         return true;
+      }
     }
+
+    return true;
+  }
 };
 // @lc code=end
 

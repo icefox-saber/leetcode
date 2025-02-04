@@ -28,32 +28,26 @@ using namespace std;
 #include <vector>
 // @lcpr-template-end
 // @lc code=start
-class Solution
-{
+class Solution {
 public:
-    vector<int> sortArrayByParityII(vector<int> &nums)
-    {
-        size_t i = 0, j = 1;
-        while (i < nums.size() && j < nums.size())
-        {
-            if (nums[i] % 2 == 0)
-            {
-                i += 2;
-                continue;
-            }
-            if (nums[j] % 2 == 1)
-            {
-                j += 2;
-                continue;
-            }
-            if (nums[i] % 2 == 1 && nums[j] % 2 == 0)
-            {
-                swap(nums[i], nums[j]);
-            }
-        }
-
-        return std::move(nums);
+  vector<int> sortArrayByParityII(vector<int> &nums) {
+    size_t i = 0, j = 1;
+    while (i < nums.size() && j < nums.size()) {
+      if (nums[i] % 2 == 0) {
+        i += 2;
+        continue;
+      }
+      if (nums[j] % 2 == 1) {
+        j += 2;
+        continue;
+      }
+      if (nums[i] % 2 == 1 && nums[j] % 2 == 0) {
+        swap(nums[i], nums[j]);
+      }
     }
+
+    return std::move(nums);
+  }
 };
 // @lc code=end
 
