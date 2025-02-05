@@ -91,19 +91,16 @@ using namespace std;
 // @lcpr-template-end
 // @lc code=start
 
-void creat(vector<vector<int>> &sets, const vector<int> &table,
+void creat(vector<vector<int>> &sets, const vector<pair<int, int>> &pairs,
            vector<int> &creatset, int index) {
-  while (index < table.size() && !table[index]) {
-    index++;
-  }
-  if (table.size() == index) {
+  if (pairs.size() == index) {
     sets.push_back(creatset);
     return;
   }
 
-  for (size_t i = 0; i <= table[index]; i++) {
-    creatset.insert(creatset.end(), i, index - 10);
-    creat(sets, table, creatset, index + 1);
+  for (size_t i = 0; i <= pairs[index].second; i++) {
+    creatset.insert(creatset.end(), i, pairs[index].first);
+    creat(sets, pairs, creatset, index + 1);
     creatset.resize(creatset.size() - i);
   }
 };
@@ -114,12 +111,17 @@ public:
     vector<int> table(21, 0);
     vector<vector<int>> sets;
     vector<int> creatset;
-    vector<int> mintable;
-    // 去重
+    vector<pair<int, int>> pairs;
     for (int &num : nums) {
       table[num + 10]++;
     }
-    creat(sets, table, creatset, 0);
+    for (size_t i = 0; i < table.size(); i++) {
+      if (table[i]) {
+        pairs.emplace_back(i - 10, table[i]);
+      }
+    }
+
+    creat(sets, pairs, creatset, 0);
     return sets;
   }
 };
