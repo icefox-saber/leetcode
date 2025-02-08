@@ -3,10 +3,10 @@
 // @lcpr-before-debug-end
 
 /*
- * @lc app=leetcode.cn id=14 lang=cpp
+ * @lc app=leetcode.cn id=15 lang=cpp
  * @lcpr version=30204
  *
- * [14] Longest Common Prefix
+ * [15] 3Sum
  */
 
 // @lcpr-template-start
@@ -92,19 +92,35 @@ using namespace std;
 // @lc code=start
 class Solution {
 public:
-  string longestCommonPrefix(vector<string> &strs) {
-    auto str = std::move(strs.back());
-    strs.pop_back();
-    string res;
-    for (size_t i = 0; i < str.size(); i++) {
-      for (const auto &s : strs) {
-        if ((s.size() <= i) || (s[i] != str[i])) {
-          return res;
+  vector<vector<int>> threeSum(vector<int> &nums) {
+    sort(nums.begin(), nums.end(), [](int i, int j) { return i < j; });
+    auto end = nums.end();
+    vector<vector<int>> res;
+    for (auto i = nums.begin(); i < end - 2; i++) {
+
+      auto l = i + 1, r = end - 1;
+      while (l < r) {
+        if (!(*i + *l + *r)) {
+          vector<int> t = {*i, *l, *r};
+          res.emplace_back(t);
+          auto tmp = r;
+          while (l < --r && *tmp == *r) {
+          }
+          tmp = l;
+          while (++l < r && *tmp == *l) {
+          }
+        } else if ((*i + *l + *r) > 0) {
+          r--;
+        } else {
+          l++;
         }
       }
-      res.push_back(str[i]);
+
+      while ((i + 1) < end && *(i + 1) == *(i)) {
+        i++;
+      }
     }
-    // string res(str.begin(),str.begin()+i);
+
     return res;
   }
 };
@@ -112,11 +128,15 @@ public:
 
 /*
 // @lcpr case=start
-// ["flower","flow","flight"]\n
+// [-1,0,1,2,-1,-4]\n
 // @lcpr case=end
 
 // @lcpr case=start
-// ["dog","racecar","car"]\n
+// [0,1,1]\n
+// @lcpr case=end
+
+// @lcpr case=start
+// [0,0,0]\n
 // @lcpr case=end
 
  */
