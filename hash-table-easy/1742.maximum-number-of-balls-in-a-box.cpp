@@ -1,3 +1,7 @@
+// @lcpr-before-debug-begin
+
+// @lcpr-before-debug-end
+
 /*
  * @lc app=leetcode.cn id=1742 lang=cpp
  * @lcpr version=30204
@@ -89,7 +93,13 @@ using namespace std;
 class Solution {
 public:
   int countBalls(int lowLimit, int highLimit) {
-    map<int, int> table;
+    int highcopy = highLimit, num = 0;
+    while (highcopy) {
+      ++num;
+      highcopy /= 10;
+    }
+
+    vector<int> table(9 * num + 1, 0);
     auto getindex = [](int num) {
       int res = 0;
       while (num) {
@@ -101,21 +111,26 @@ public:
     for (int i = lowLimit; i <= highLimit; i++) {
       ++table[getindex(i)];
     }
-    std::pair<int, int> max = {0, 0};
+    int max = 0;
     for (const auto &num : table) {
-      if (num.second > max.second) {
+      if (num > max) {
         max = num;
       }
     }
 
-    return max.second;
+    return max;
   }
 };
 // @lc code=end
 
+// @lcpr-div-debug-arg-start
+// funName=countBalls
+// paramTypes= ["number","number"]
+// @lcpr-div-debug-arg-end
+
 /*
 // @lcpr case=start
-// 1\n10\n
+// 99999\n99999\n
 // @lcpr case=end
 
 // @lcpr case=start

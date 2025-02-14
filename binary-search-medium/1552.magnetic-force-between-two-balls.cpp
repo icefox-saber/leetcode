@@ -96,7 +96,6 @@ public:
     sort(position.begin(), position.end());
     int n = position.back();
 
-    auto isvalid = [&n](int i) { return i <= n; };
     auto isable = [&](int x) {
       int last = position.front();
       int num = 1;
