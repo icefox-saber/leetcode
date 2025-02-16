@@ -95,12 +95,7 @@ public:
   string longestPalindrome(string s) {
     int n = s.size();
 
-    vector<vector<bool>> dp;
-    vector<bool> vec(n, false);
-
-    for (size_t i = 0; i < n; i++) {
-      dp.push_back(vec);
-    }
+    vector dp(n, vector(n, false));
 
     for (size_t i = 0; i < n; i++) {
       for (size_t j = 0; j <= i; j++) {
@@ -108,9 +103,13 @@ public:
       }
     }
     int maxi = 0, maxj = 0, maxlen = 0;
+
+    auto ispalindrome = [&](int i, int j) {
+      return (s[i] == s[j] && dp[i + 1][j - 1]) ? true : false;
+    };
     for (size_t len = 2; len <= n; len++) {
       for (size_t i = 0; i + len <= n; i++) {
-        if (dp[i][i + len - 1] = ispalindrome(dp, s, i, i + len - 1)) {
+        if (dp[i][i + len - 1] = ispalindrome(i, i + len - 1)) {
           if (len > maxlen) {
             maxlen = len;
             maxi = i;
@@ -121,11 +120,6 @@ public:
     }
     string res(s.begin() + maxi, s.begin() + maxj + 1);
     return res;
-  }
-
-  bool ispalindrome(const vector<vector<bool>> &dp, const string &s, int i,
-                    int j) {
-    return (s[i] == s[j] && dp[i + 1][j - 1]) ? true : false;
   }
 };
 // @lc code=end
