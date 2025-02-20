@@ -90,37 +90,44 @@
 using namespace std;
 // @lcpr-template-end
 // @lc code=start
-//需要改进成KMP算法
+// 需要改进成KMP算法
 class Solution {
 public:
   int strStr(string haystack, string needle) {
-    return haystack.find(needle);
-    auto e = haystack.end();
-    auto ismatch = [&](auto h) {
-      auto n = needle.begin(), ne = needle.end();
-      while (h < e && n < ne) {
-        if (*h == *n) {
-          ++h;
-          ++n;
-        } else {
-          break;
-        }
+
+    vector next(needle.size(), -1);
+
+    // 计算KMP用的next数组, next[i]表示next[0:next[i]] = next[i - next[i]:i ]
+    for (int i = 1, j = 0; i < needle.size(); i++) {
+      while (j && needle[j] != needle[i]) {
+        j = next[j - 1] + 1;
       }
-      return n == ne;
-    };
-    for (auto h = haystack.begin(); h < e; ++h) {
-      if (ismatch(h)) {
-        return h - haystack.begin();
+      if (needle[j] == needle[i]) {
+        ++j;
       }
+      next[i] = j - 1;
     }
-    return -1;
+
+    int n = 0;
+    int h = 0;
+    while (n < needle.size() && h < haystack.size()) {
+      while (n && needle[n] != haystack[h]) {
+        n = next[n - 1] + 1;
+      }
+      if (needle[n] == haystack[h]) {
+        n++;
+      }
+      h++;
+    }
+
+    return n == needle.size() ? h - needle.size() : -1;
   }
 };
 // @lc code=end
 
 /*
 // @lcpr case=start
-// "sadbutsad"\n"sad"\n
+// "mississippi"\n"issip"\n
 // @lcpr case=end
 
 // @lcpr case=start
