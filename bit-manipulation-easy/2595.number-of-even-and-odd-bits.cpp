@@ -1,3 +1,7 @@
+// @lcpr-before-debug-begin
+
+// @lcpr-before-debug-end
+
 /*
  * @lc app=leetcode.cn id=2595 lang=cpp
  * @lcpr version=30204
@@ -89,22 +93,31 @@ using namespace std;
 class Solution {
 public:
   vector<int> evenOddBit(int n) {
-    int copy = n;
     int odd = 0, even = 0;
-    while (n) {
-      even += n % 2;
-      n /= 4;
+    int e = 1, o = 2;
+    while (e <= n) {
+      if (e & n) {
+        ++even;
+      }
+
+      e <<= 2;
     }
-    copy /= 2;
-    while (copy) {
-      odd += copy % 2;
-      copy /= 4;
+    while (o <= n) {
+      if (o & n) {
+        ++odd;
+      }
+      o <<= 2;
     }
 
     return {even, odd};
   }
 };
 // @lc code=end
+
+// @lcpr-div-debug-arg-start
+// funName=evenOddBit
+// paramTypes= ["number"]
+// @lcpr-div-debug-arg-end
 
 /*
 // @lcpr case=start
