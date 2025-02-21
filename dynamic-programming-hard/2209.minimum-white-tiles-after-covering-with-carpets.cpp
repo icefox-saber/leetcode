@@ -104,11 +104,8 @@ public:
 
     for (size_t i = carpetLen; i < floor.size(); i++) {
       for (size_t j = 1; j <= numCarpets; j++) {
-        if (floor[i] == '1') {
-          dp[i][j] = min(dp[i - carpetLen][j - 1], dp[i - 1][j] + 1);
-        } else {
-          dp[i][j] = min(dp[i - carpetLen][j - 1], dp[i - 1][j]);
-        }
+        dp[i][j] =
+            min(dp[i - carpetLen][j - 1], dp[i - 1][j] + (floor[i] == '1'));
       }
     }
 
