@@ -93,95 +93,33 @@ using namespace std;
 class Solution {
 public:
   vector<int> findSubstring(string s, vector<string> &words) {
-    vector<int> table(s.size(), -1);
-
-    int wsnum = words.size();
-    int wslen = words.front().size();
-    auto mark = [&](int i) {
-      assert(i + wslen <= s.size());
-      string tmps(s, i, wslen);
-      for (int j = 0; j < wsnum; j++) {
-
-        if (tmps == words[j]) {
-          table[i] = j;
-          break;
-        }
-      }
-    };
-    for (size_t i = 0; i + wslen <= s.size(); i++) {
-      mark(i);
-    }
-
-    vector<int> tmp(wsnum, 0);
     vector<int> res;
-    int num = 0;
-    map<string, vector<int>> wordsmap;
-    for (size_t i = 0; i < wsnum; i++) {
-      wordsmap[words[i]].push_back(i);
-    }
-
-    vector wordstable(wsnum, vector(0, 0));
-
-    for (const auto &p : wordsmap) {
-      const auto &vec = p.second;
-      int b = vec[0];
-      wordstable[b].assign(vec.begin(), vec.end());
-    }
-    auto findfirstzero = [&](int i) {
-      for (size_t j = 0; j < wordstable[i].size(); j++) {
-        if (tmp[wordstable[i][j]] == 0) {
-          return wordstable[i][j];
+    int wordnum = words.size(), wordlen = words[0].length();
+    for (size_t i = 0; i < wordlen && i + wordnum * wordlen <= s.size(); i++) {
+      unordered_map<string, int> table;
+      // 初始化窗口和哈希表
+      for (size_t j = i; j < i + wordnum * wordlen; j += wordlen) {
+        ++table[s.substr(j, wordlen)];
+      }
+      for (const auto &word : words) {
+        if (!--table[word]) {
+          table.erase(word);
         }
       }
-      return wordstable[i][0];
-    };
 
-    auto findfirstbt = [&](int i) {
-      for (size_t j = 0; j < wordstable[i].size(); j++) {
-        if (tmp[wordstable[i][j]] > 1) {
-          return wordstable[i][j];
-        }
-      }
-      for (size_t j = 0; j < wordstable[i].size(); j++) {
-        if (tmp[wordstable[i][j]] == 1) {
-          return wordstable[i][j];
-        }
-      }
-      assert(false);
-      return wordstable[i][0];
-    };
-
-    for (int i = 0; i < wslen; i++) {
-      fill(tmp.begin(), tmp.end(), 0);
-
-      for (int j = i, size = 0, begin = j, num = 0; j < s.size(); j += wslen) {
-        if (table[j] >= 0) {
-          int tj = table[j];
-          int index = findfirstzero(tj);
-          tmp[index]++;
-
-          if (tmp[index] == 1) {
-            num++;
-          }
-        }
-        size++;
-        if (size > wsnum) {
-
-          if (table[begin] >= 0) {
-            int tb = table[begin];
-            int index = findfirstbt(tb);
-            tmp[index]--;
-            if (tmp[index] == 0) {
-              num--;
-            }
-          }
-
-          begin += wslen;
-          size--;
+      for (size_t start = i; start + wordnum * wordlen <= s.size();
+           start += wordlen) {
+        if (table.empty()) {
+          res.push_back(start);
         }
 
-        if (num == wsnum) {
-          res.push_back(begin);
+        auto word = s.substr(start + wordnum * wordlen, wordlen);
+        if (!++table[word]) {
+          table.erase(word);
+        }
+        word = s.substr(start, wordlen);
+        if (!--table[word]) {
+          table.erase(word);
         }
       }
     }
