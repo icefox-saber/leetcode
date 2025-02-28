@@ -1,3 +1,4 @@
 *.json
 .lcpr_data/
 .vscode/
+leetcode.code-workspace
