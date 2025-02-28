@@ -92,17 +92,26 @@ class FoodRatings {
     int rate;
   };
 
+  struct rate_food {
+    int rate;
+    string food;
+    rate_food(const int r, const string &str) : rate(r), food(str){};
+    bool operator<(const rate_food &other) const {
+      return rate > other.rate || (rate == other.rate && food < other.food);
+    }
+  };
+
   unordered_map<string, cuisines_rate> food_to_cuisines_and_rate;
-  unordered_map<string, map<int, set<string>>> cursines_to_rate_to_foods;
+  unordered_map<string, set<rate_food>> cursines_to_rate_and_foods;
 
 public:
   FoodRatings(vector<string> &foods, vector<string> &cuisines,
               vector<int> &ratings)
       : food_to_cuisines_and_rate(foods.size()),
-        cursines_to_rate_to_foods(foods.size()) {
+        cursines_to_rate_and_foods(foods.size()) {
     for (size_t i = 0; i < foods.size(); i++) {
       food_to_cuisines_and_rate[foods[i]] = {cuisines[i], ratings[i]};
-      cursines_to_rate_to_foods[cuisines[i]][ratings[i]].emplace(foods[i]);
+      cursines_to_rate_and_foods[cuisines[i]].emplace(ratings[i], foods[i]);
     }
   }
 
@@ -110,19 +119,15 @@ public:
     cuisines_rate &cr = food_to_cuisines_and_rate[food];
     const cuisines_rate oldcr = cr;
     cr.rate = newRating;
-    auto &rate_to_foods = cursines_to_rate_to_foods[oldcr.cuisine];
-    auto &foods = rate_to_foods[oldcr.rate];
-    foods.erase(food);
-    if (foods.empty()) {
-      rate_to_foods.erase(oldcr.rate);
-    }
-    rate_to_foods[cr.rate].emplace(food);
+    auto &rate_and_foods = cursines_to_rate_and_foods[oldcr.cuisine];
+    rate_and_foods.erase({oldcr.rate, food});
+    rate_and_foods.emplace(cr.rate, food);
   }
 
   string highestRated(string cuisine) {
-    const auto &rate_to_foods = cursines_to_rate_to_foods[cuisine];
-    const auto &foods = rate_to_foods.rbegin()->second;
-    return *foods.begin();
+    const auto &rate_to_foods = cursines_to_rate_and_foods[cuisine];
+    const auto &food = rate_to_foods.begin()->food;
+    return food;
   }
 };
 
