@@ -89,22 +89,20 @@ using namespace std;
 class Solution {
 public:
   bool isValidSudoku(vector<vector<char>> &board) {
-    vector rows(9, vector(9, 0));
-    vector cols(9, vector(9, 0));
-    vector boxes(3, vector(3, vector(9, 0)));
+    vector rows(9, vector(9, false));
+    vector cols(9, vector(9, false));
+    vector boxes(3, vector(3, vector(9, false)));
 
     for (int i = 0; i < 9; i++) {
       for (int j = 0; j < 9; j++) {
         if (board[i][j] != '.') {
           int num = board[i][j] - '1'; //- '0' +1
-          ++rows[i][num];
-          ++cols[j][num];
-          ++boxes[i / 3][j / 3][num];
 
-          if (rows[i][num] > 1 || cols[j][num] > 1 ||
-              boxes[i / 3][j / 3][num] > 1) {
+          if (rows[i][num] || cols[j][num] || boxes[i / 3][j / 3][num]) {
             return false;
           }
+
+          rows[i][num] = boxes[i / 3][j / 3][num] = cols[j][num] = true;
         }
       }
     }
